@@ -16,11 +16,9 @@ func main(){
 
 	hh := handlers.NewHello(logger)
 	gh := handlers.NewGoodbye(logger)
-
 	sm := http.NewServeMux()
 	sm.Handle("/", hh)
 	sm.Handle("/goodbye", gh)
-
 	server := &http.Server{
 		Addr: ":9090",
 		Handler: sm,
