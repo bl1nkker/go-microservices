@@ -13,15 +13,10 @@ import (
 func main(){
 	// HandleFunc takes my func, creates an HTTP handler, and adds it to the DefaultServeMux
 	logger := log.New(os.Stdout, "go-microservices_", log.LstdFlags)
-
-	hh := handlers.NewHello(logger)
-	gh := handlers.NewGoodbye(logger)
 	productHandler := handlers.NewProducts(logger)
 
 	sm := http.NewServeMux()
-	sm.Handle("/", hh)
-	sm.Handle("/goodbye", gh)
-	sm.Handle("/products", productHandler)
+	sm.Handle("/", productHandler)
 	server := &http.Server{
 		Addr: ":9090",
 		Handler: sm,
