@@ -16,26 +16,31 @@ func NewProducts(logger *log.Logger) *Products{
 
 func (product *Products) ServeHTTP(res http.ResponseWriter, req *http.Request){
 	if req.Method == http.MethodGet{
-		product.GetProducts(res, req)
+		product.getProducts(res, req)
 		return
 	} else if req.Method == http.MethodPost{
-		product.PostProduct(res, req)
+		product.postProduct(res, req)
 	}
 	res.WriteHeader(http.StatusMethodNotAllowed)
 }
 
-func (product *Products) GetProducts(res http.ResponseWriter, req *http.Request){
+func (product *Products) getProducts(res http.ResponseWriter, req *http.Request){
 	products := data.GetProducts()
 	err := products.ToJson(res)
 	if err != nil{
-		http.Error(res, "Unable to marshal error", http.StatusInternalServerError)
+		http.Error(res, "Unable to encode error", http.StatusInternalServerError)
 	}
 }
 
-func (product *Products) PostProduct(res http.ResponseWriter, req *http.Request){
-	products := data.GetProducts()
-	err := products.ToJson(res)
+func (p *Products) postProduct(res http.ResponseWriter, req *http.Request){
+	// data := req.Body
+	product := &data.Product{}
+	p.logger.Printf("Incoming Body: %v", req.Body)
+	err := product.FromJson(req.Body)
+	p.logger.Printf("Incoming Product: %#v", product)
 	if err != nil{
-		http.Error(res, "Unable to marshal error", http.StatusInternalServerError)
+		http.Error(res, "Unable to decode error", http.StatusBadRequest)
 	}
+
+	data.AddProduct(product)
 }
