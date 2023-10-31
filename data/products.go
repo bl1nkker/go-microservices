@@ -85,4 +85,13 @@ var productsList = []*Product{
 		CreatedOn: time.Now().UTC().String(),
 		UpdatedOn: time.Now().UTC().String(),
 	},
+	{
+		ID: 3,
+		Name: "Typical Coffee",
+		Description: "Cool Typical Coffee",
+		Price: 3.99,
+		SKU: "abc337",
+		CreatedOn: time.Now().UTC().String(),
+		UpdatedOn: time.Now().UTC().String(),
+	},
 }
