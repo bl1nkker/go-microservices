@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"go-microservices/data"
 	"log"
 	"net/http"
@@ -27,13 +28,9 @@ func (product *Products) GetProducts(res http.ResponseWriter, req *http.Request)
 }
 
 func (p *Products) PostProduct(res http.ResponseWriter, req *http.Request){
-	product := &data.Product{}
-	err := product.FromJson(req.Body)
-	if err != nil{
-		http.Error(res, "Unable to decode error", http.StatusBadRequest)
-	}
+	product := req.Context().Value(KeyProduct{}).(data.Product)
 
-	data.AddProduct(product)
+	data.AddProduct(&product)
 }
 func (p *Products) PutProduct(res http.ResponseWriter, req *http.Request){
 	vars := mux.Vars(req)
@@ -42,15 +39,9 @@ func (p *Products) PutProduct(res http.ResponseWriter, req *http.Request){
 		http.Error(res, "Unable to convert an id", http.StatusBadRequest)
 		return
 	}
-	product := &data.Product{}
-	err := product.FromJson(req.Body)
-	p.logger.Printf("Product: %#v", product)
-	if err != nil{
-		http.Error(res, "Unable to decode error", http.StatusBadRequest)
-		return
-	}
 
-	err = data.UpdateProduct(product, id)
+	product := req.Context().Value(KeyProduct{}).(data.Product)
+	err := data.UpdateProduct(&product, id)
 	if err == data.ErrProductNotFound{
 		http.Error(res, "Product not found", http.StatusNotFound)
 		return
@@ -60,5 +51,22 @@ func (p *Products) PutProduct(res http.ResponseWriter, req *http.Request){
 		http.Error(res, "Internal Status Error", http.StatusInternalServerError)
 		return
 	}
-	
+}
+
+type KeyProduct struct{}
+
+func (p Products) MiddlewareProductValidation(next http.Handler) http.Handler{
+	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request){
+		prod := data.Product{}
+
+		err := prod.FromJson(req.Body)
+		if err != nil{
+			http.Error(res, "Unable to decode error", http.StatusBadRequest)
+			return
+		}
+
+		ctx := context.WithValue(req.Context(), KeyProduct{}, prod)
+		req = req.WithContext(ctx)
+		next.ServeHTTP(res, req)
+	})
 }

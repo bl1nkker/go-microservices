@@ -23,9 +23,12 @@ func main(){
 
 	postRouter := sm.Methods("POST").Subrouter()
 	postRouter.HandleFunc("/", productHandler.PostProduct)
+	postRouter.Use(productHandler.MiddlewareProductValidation)
 
 	putRouter := sm.Methods("PUT").Subrouter()
 	putRouter.HandleFunc("/{id:[0-9]+}", productHandler.PutProduct)
+	putRouter.Use(productHandler.MiddlewareProductValidation)
+
 	server := &http.Server{
 		Addr: ":9090",
 		Handler: sm,
@@ -51,7 +54,4 @@ func main(){
 
 	tc, _ := context.WithTimeout(context.Background(), 30 * time.Second)
 	server.Shutdown(tc)
-
-	// DefaultServeMux is an HTTP request multiplexer. It matches the URL of each incoming request against a list of 
-	// registered patterns and calls the handler for the pattern that most closely matches the URL.
 }
