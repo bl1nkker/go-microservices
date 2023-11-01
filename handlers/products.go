@@ -4,8 +4,9 @@ import (
 	"go-microservices/data"
 	"log"
 	"net/http"
-	"regexp"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 type Products struct{
@@ -16,29 +17,7 @@ func NewProducts(logger *log.Logger) *Products{
 	return &Products{logger: logger}
 }
 
-func (product *Products) ServeHTTP(res http.ResponseWriter, req *http.Request){
-	product.logger.Printf("METHOD: %v", req.Method)
-	if req.Method == http.MethodGet{
-		product.getProducts(res, req)
-		return
-	} else if req.Method == http.MethodPost{
-		product.postProduct(res, req)
-	} else if req.Method == http.MethodPut{
-		uri := req.URL.Path
-		rx := regexp.MustCompile(`/([0-9]+)`)
-		group := rx.FindAllStringSubmatch(uri, -1)
-		id, err := strconv.Atoi(group[0][1])
-
-		if err != nil{
-			http.Error(res, "Invalid URI", http.StatusBadRequest)
-			return
-		}
-		product.putProduct(id, res, req)
-	}
-	res.WriteHeader(http.StatusMethodNotAllowed)
-}
-
-func (product *Products) getProducts(res http.ResponseWriter, req *http.Request){
+func (product *Products) GetProducts(res http.ResponseWriter, req *http.Request){
 	products := data.GetProducts()
 	err := products.ToJson(res)
 	if err != nil{
@@ -47,7 +26,7 @@ func (product *Products) getProducts(res http.ResponseWriter, req *http.Request)
 	}
 }
 
-func (p *Products) postProduct(res http.ResponseWriter, req *http.Request){
+func (p *Products) PostProduct(res http.ResponseWriter, req *http.Request){
 	product := &data.Product{}
 	err := product.FromJson(req.Body)
 	if err != nil{
@@ -56,7 +35,13 @@ func (p *Products) postProduct(res http.ResponseWriter, req *http.Request){
 
 	data.AddProduct(product)
 }
-func (p *Products) putProduct(id int, res http.ResponseWriter, req *http.Request){
+func (p *Products) PutProduct(res http.ResponseWriter, req *http.Request){
+	vars := mux.Vars(req)
+	id, parseError := strconv.Atoi(vars["id"])
+	if parseError != nil{
+		http.Error(res, "Unable to convert an id", http.StatusBadRequest)
+		return
+	}
 	product := &data.Product{}
 	err := product.FromJson(req.Body)
 	p.logger.Printf("Product: %#v", product)
