@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"go-microservices/data"
 	"log"
 	"net/http"
@@ -62,6 +63,13 @@ func (p Products) MiddlewareProductValidation(next http.Handler) http.Handler{
 		err := prod.FromJson(req.Body)
 		if err != nil{
 			http.Error(res, "Unable to decode error", http.StatusBadRequest)
+			return
+		}
+
+		err = prod.Validate()
+		if err != nil{
+			p.logger.Printf("Validation Error: %s", err)
+			http.Error(res, fmt.Sprintf("Validation Error: %s", err), http.StatusBadRequest)
 			return
 		}
 
