@@ -1,0 +1,91 @@
+basePath: /
+consumes:
+    - application/json
+definitions:
+    Product:
+        description: data.Product represents a product
+        properties:
+            description:
+                description: Description of the product
+                example: Cool Latte
+                type: string
+                x-go-name: Description
+            id:
+                description: ID of the product
+                example: 1
+                format: int64
+                type: integer
+                x-go-name: ID
+            name:
+                description: Name of the product
+                example: Latte
+                type: string
+                x-go-name: Name
+            price:
+                description: Price of the product
+                example: 12.99
+                format: float
+                maximum: 999
+                minimum: 1
+                type: number
+                x-go-name: Price
+            sku:
+                description: SKU of the product
+                example: abc-def-xyz
+                type: string
+                x-go-name: SKU
+        required:
+            - id
+            - name
+            - price
+            - sku
+        type: object
+        x-go-package: go-microservices/data
+info:
+    description: the purpose of this application is to provide an application
+    title: Product API.
+    version: 1.0.0
+paths:
+    /products:
+        get:
+            description: Returns a list of Products
+            operationId: listProducts
+            responses:
+                "200":
+                    $ref: '#/responses/productsResponse'
+            tags:
+                - products
+    /products/{id}:
+        put:
+            description: Returns a list of Products
+            operationId: putProduct
+            parameters:
+                - description: The ID of the product to update in the database
+                  format: int64
+                  in: path
+                  name: id
+                  required: true
+                  type: integer
+                  x-go-name: ID
+            responses:
+                "201":
+                    $ref: '#/responses/productResponse'
+            tags:
+                - products
+produces:
+    - application/json
+responses:
+    productResponse:
+        description: Product returns in the response
+        schema:
+            $ref: '#/definitions/Product'
+    productsResponse:
+        description: A list of products returns in the response
+        schema:
+            items:
+                $ref: '#/definitions/Product'
+            type: array
+schemes:
+    - http
+    - https
+swagger: "2.0"

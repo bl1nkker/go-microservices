@@ -1,3 +1,18 @@
+// Package classification Product API.
+//
+// the purpose of this application is to provide an application
+//
+//	Schemes: http, https
+//	BasePath: /
+//	Version: 1.0.0
+//
+//	Consumes:
+//	- application/json
+//
+//	 Produces:
+//	 - application/json
+//
+// swagger:meta
 package handlers
 
 import (
@@ -11,6 +26,30 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// A list of products returns in the response
+// swagger:response productsResponse
+type ProductsResponseWrapper struct {
+	// Description of the response
+	// in: body
+	Body []data.Product
+}
+
+// Product returns in the response
+// swagger:response productResponse
+type ProductResponseWrapper struct {
+	// Description of the response
+	// in: body
+	Body data.Product
+}
+
+// swagger:parameters putProduct
+type ProductIDParameterWrapper struct {
+	// The ID of the product to update in the database
+	// in: path
+	// required: true
+	ID int `json:"id"`
+}
+
 type Products struct{
 	logger *log.Logger
 }
@@ -19,6 +58,10 @@ func NewProducts(logger *log.Logger) *Products{
 	return &Products{logger: logger}
 }
 
+// swagger:route GET /products products listProducts
+// Returns a list of Products
+// responses:
+//	200: productsResponse
 func (product *Products) GetProducts(res http.ResponseWriter, req *http.Request){
 	products := data.GetProducts()
 	err := products.ToJson(res)
@@ -33,6 +76,11 @@ func (p *Products) PostProduct(res http.ResponseWriter, req *http.Request){
 
 	data.AddProduct(&product)
 }
+
+// swagger:route PUT /products/{id} products putProduct
+// Returns a list of Products
+// responses:
+//	201: productResponse
 func (p *Products) PutProduct(res http.ResponseWriter, req *http.Request){
 	vars := mux.Vars(req)
 	id, parseError := strconv.Atoi(vars["id"])

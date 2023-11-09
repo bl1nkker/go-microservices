@@ -10,12 +10,30 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type Product struct{
-	ID int `json:"id"`
-	Name string `json:"name" validate:"required"`
-	Description string `json:"description"`
-	Price float32 `json:"price" validate:"gt=0"`
-	SKU string `json:"sku" validate:"required,sku"`
+// data.Product represents a product
+// swagger:model
+type Product struct {
+    // ID of the product
+    // required: true
+    // example: 1
+    ID int `json:"id"`
+    // Name of the product
+    // required: true
+    // example: Latte
+    Name string `json:"name"`
+    // Description of the product
+    // example: Cool Latte
+    Description string `json:"description"`
+    // Price of the product
+    // required: true
+    // example: 12.99
+	// min: 1
+    // max: 999
+    Price float32 `json:"price"`
+    // SKU of the product
+    // required: true
+    // example: abc-def-xyz
+    SKU string `json:"sku"`
 	CreatedOn string `json:"-"`
 	UpdatedOn string `json:"-"`
 	DeletedOn string `json:"-"`

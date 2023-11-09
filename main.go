@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -29,8 +30,13 @@ func main(){
 	putRouter.HandleFunc("/{id:[0-9]+}", productHandler.PutProduct)
 	putRouter.Use(productHandler.MiddlewareProductValidation)
 
+	options := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
+	swaggerHandler := middleware.Redoc(options, nil)
+	getRouter.Handle("/docs", swaggerHandler)
+	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
+
 	server := &http.Server{
-		Addr: ":9090",
+		Addr: ":9091",
 		Handler: sm,
 		IdleTimeout: 120 * time.Second,
 		ReadTimeout: 1 * time.Second,
