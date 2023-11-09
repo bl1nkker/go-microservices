@@ -10,5 +10,8 @@ get:
 put:
 	curl -v localhost:9091/1 -XPUT -d '{"id": 12345, "name": "tea", "description": "hello world 5", "price": 1.0, "sku": "fdc-ert-hfs"}' | jq
 
+delete:
+	curl -v localhost:9091/1 -XDELETE | jq
+
 post:
 	curl -v -d '{"name": "tea", "price": 20.12, "sku": "abc-dfv-dsg"}' localhost:9091/ | jq

@@ -42,9 +42,13 @@ type ProductResponseWrapper struct {
 	Body data.Product
 }
 
-// swagger:parameters putProduct
+// swagger:response noContent
+type NoContentWrapped struct {
+}
+
+// swagger:parameters putProduct deleteProduct
 type ProductIDParameterWrapper struct {
-	// The ID of the product to update in the database
+	// The ID of the product in the database
 	// in: path
 	// required: true
 	ID int `json:"id"`
@@ -78,7 +82,7 @@ func (p *Products) PostProduct(res http.ResponseWriter, req *http.Request){
 }
 
 // swagger:route PUT /products/{id} products putProduct
-// Returns a list of Products
+// Updates Product by ID
 // responses:
 //	201: productResponse
 func (p *Products) PutProduct(res http.ResponseWriter, req *http.Request){
@@ -91,6 +95,29 @@ func (p *Products) PutProduct(res http.ResponseWriter, req *http.Request){
 
 	product := req.Context().Value(KeyProduct{}).(data.Product)
 	err := data.UpdateProduct(&product, id)
+	if err == data.ErrProductNotFound{
+		http.Error(res, "Product not found", http.StatusNotFound)
+		return
+	}
+
+	if err != nil{
+		http.Error(res, "Internal Status Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+// swagger:route DELETE /products/{id} products deleteProduct
+// Deletes Product by ID
+// responses:
+//	204: noContent
+func (p *Products) DeleteProduct(res http.ResponseWriter, req *http.Request){
+	vars := mux.Vars(req)
+	id, parseError := strconv.Atoi(vars["id"])
+	if parseError != nil{
+		http.Error(res, "Unable to convert an id", http.StatusBadRequest)
+		return
+	}
+	err := data.DeleteProduct(id)
 	if err == data.ErrProductNotFound{
 		http.Error(res, "Product not found", http.StatusNotFound)
 		return

@@ -70,6 +70,16 @@ func UpdateProduct(p *Product, id int) error{
 	return nil
 }
 
+func DeleteProduct(id int) error {
+    _, pos, err := findProduct(id)
+    if err != nil {
+        return err
+    }
+
+    productsList = append(productsList[:pos], productsList[pos+1:]...)
+    return nil
+}
+
 func (product *Product) Validate() error{
 	validate := validator.New()
 	validate.RegisterValidation("sku", validateSKU)
