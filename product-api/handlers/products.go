@@ -2,7 +2,7 @@
 //
 // the purpose of this application is to provide an application
 //
-//	Schemes: http, https
+//	Schemes: http
 //	BasePath: /
 //	Version: 1.0.0
 //
@@ -102,6 +102,7 @@ type ErrorValidationWrapper struct {
 // responses:
 //	200: productsResponse
 func (product *Products) GetProducts(res http.ResponseWriter, req *http.Request){
+	// res.Header().Add("Content-Type", "application/json")
 	products := data.GetProducts()
 	err := products.ToJson(res)
 	if err != nil{

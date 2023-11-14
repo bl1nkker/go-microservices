@@ -20,18 +20,18 @@ func main(){
 
 	sm := mux.NewRouter()
 	getRouter := sm.Methods("GET").Subrouter()
-	getRouter.HandleFunc("/", productHandler.GetProducts)
+	getRouter.HandleFunc("/products", productHandler.GetProducts)
 
 	postRouter := sm.Methods("POST").Subrouter()
-	postRouter.HandleFunc("/", productHandler.PostProduct)
+	postRouter.HandleFunc("/products", productHandler.PostProduct)
 	postRouter.Use(productHandler.MiddlewareProductValidation)
 
 	putRouter := sm.Methods("PUT").Subrouter()
-	putRouter.HandleFunc("/{id:[0-9]+}", productHandler.PutProduct)
+	putRouter.HandleFunc("/products/{id:[0-9]+}", productHandler.PutProduct)
 	putRouter.Use(productHandler.MiddlewareProductValidation)
 
 	deleteRouter := sm.Methods("DELETE").Subrouter()
-	deleteRouter.HandleFunc("/{id:[0-9]+}", productHandler.DeleteProduct)
+	deleteRouter.HandleFunc("/products/{id:[0-9]+}", productHandler.DeleteProduct)
 
 	options := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
 	swaggerHandler := middleware.Redoc(options, nil)

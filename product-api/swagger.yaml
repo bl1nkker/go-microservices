@@ -2,63 +2,9 @@ basePath: /
 consumes:
     - application/json
 definitions:
-    GenericError:
-        description: GenericError is a generic error message returned by a server
-        properties:
-            message:
-                type: string
-                x-go-name: Message
-        type: object
-        x-go-package: go-microservices/handlers
     Product:
         description: The model data.Product represents a product
-        properties:
-            description:
-                description: Description of the product
-                example: Cool Latte
-                type: string
-                x-go-name: Description
-            id:
-                description: ID of the product
-                example: 1
-                format: int64
-                type: integer
-                x-go-name: ID
-            name:
-                description: Name of the product
-                example: Latte
-                type: string
-                x-go-name: Name
-            price:
-                description: Price of the product
-                example: 12.99
-                format: float
-                maximum: 999
-                minimum: 1
-                type: number
-                x-go-name: Price
-            sku:
-                description: SKU of the product
-                example: abc-def-xyz
-                type: string
-                x-go-name: SKU
-        required:
-            - id
-            - name
-            - price
-            - sku
-        type: object
         x-go-package: go-microservices/data
-    ValidationError:
-        description: ValidationError is a collection of validation error messages
-        properties:
-            messages:
-                items:
-                    type: string
-                type: array
-                x-go-name: Messages
-        type: object
-        x-go-package: go-microservices/handlers
 info:
     description: the purpose of this application is to provide an application
     title: Product API.
@@ -83,8 +29,7 @@ paths:
                   in: body
                   name: Body
                   required: true
-                  schema:
-                    $ref: '#/definitions/Product'
+                  schema: {}
             responses:
                 "200":
                     $ref: '#/responses/productResponse'
@@ -121,8 +66,7 @@ paths:
                   in: body
                   name: Body
                   required: true
-                  schema:
-                    $ref: '#/definitions/Product'
+                  schema: {}
                 - description: The ID of the product in the database
                   format: int64
                   in: path
@@ -140,25 +84,17 @@ produces:
 responses:
     errorResponse:
         description: Generic error message returned as a string
-        schema:
-            $ref: '#/definitions/GenericError'
     errorValidation:
         description: Validation errors defined as an array of strings
-        schema:
-            $ref: '#/definitions/ValidationError'
     noContent:
         description: ""
     productResponse:
         description: Product returns in the response
-        schema:
-            $ref: '#/definitions/Product'
     productsResponse:
         description: A list of products returns in the response
         schema:
-            items:
-                $ref: '#/definitions/Product'
+            items: {}
             type: array
 schemes:
     - http
-    - https
 swagger: "2.0"
