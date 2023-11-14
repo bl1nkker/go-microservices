@@ -42,6 +42,15 @@ type ProductResponseWrapper struct {
 	Body data.Product
 }
 
+// swagger:parameters putProduct postProduct
+type ProductParamsWrapper struct {
+	// Product data structure to Update or Create.
+	// Note: the id field is ignored by update and create operations
+	// in: body
+	// required: true
+	Body data.Product
+}
+
 // swagger:response noContent
 type NoContentWrapped struct {
 }
@@ -62,6 +71,32 @@ func NewProducts(logger *log.Logger) *Products{
 	return &Products{logger: logger}
 }
 
+// GenericError is a generic error message returned by a server
+type GenericError struct {
+	Message string `json:"message"`
+}
+
+// ValidationError is a collection of validation error messages
+type ValidationError struct {
+	Messages []string `json:"messages"`
+}
+
+// Generic error message returned as a string
+// swagger:response errorResponse
+type ErrorResponseWrapper struct {
+	// Description of the error
+	// in: body
+	Body GenericError
+}
+
+// Validation errors defined as an array of strings
+// swagger:response errorValidation
+type ErrorValidationWrapper struct {
+	// Collection of the errors
+	// in: body
+	Body ValidationError
+}
+
 // swagger:route GET /products products listProducts
 // Returns a list of Products
 // responses:
@@ -75,6 +110,15 @@ func (product *Products) GetProducts(res http.ResponseWriter, req *http.Request)
 	}
 }
 
+// swagger:route POST /products products postProduct
+// Create a new product
+//
+// responses:
+//	200: productResponse
+//  422: errorValidation
+//  501: errorResponse
+
+// Create handles POST requests to add new products
 func (p *Products) PostProduct(res http.ResponseWriter, req *http.Request){
 	product := req.Context().Value(KeyProduct{}).(data.Product)
 

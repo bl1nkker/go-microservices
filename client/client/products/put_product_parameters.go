@@ -15,6 +15,8 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+
+	"client/models"
 )
 
 // NewPutProductParams creates a new PutProductParams object,
@@ -61,6 +63,13 @@ PutProductParams contains all the parameters to send to the API endpoint
 	Typically these are written to a http.Request.
 */
 type PutProductParams struct {
+
+	/* Body.
+
+	     Product data structure to Update or Create.
+	Note: the id field is ignored by update and create operations
+	*/
+	Body *models.Product
 
 	/* ID.
 
@@ -123,6 +132,17 @@ func (o *PutProductParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithBody adds the body to the put product params
+func (o *PutProductParams) WithBody(body *models.Product) *PutProductParams {
+	o.SetBody(body)
+	return o
+}
+
+// SetBody adds the body to the put product params
+func (o *PutProductParams) SetBody(body *models.Product) {
+	o.Body = body
+}
+
 // WithID adds the id to the put product params
 func (o *PutProductParams) WithID(id int64) *PutProductParams {
 	o.SetID(id)
@@ -141,6 +161,11 @@ func (o *PutProductParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		return err
 	}
 	var res []error
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
+	}
 
 	// path param id
 	if err := r.SetPathParam("id", swag.FormatInt64(o.ID)); err != nil {
