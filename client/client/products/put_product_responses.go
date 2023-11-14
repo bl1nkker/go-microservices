@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"go-microservices/client/models"
+	"client/models"
 )
 
 // PutProductReader is a Reader for the PutProduct structure.

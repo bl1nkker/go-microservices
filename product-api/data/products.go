@@ -6,7 +6,6 @@ import (
 	"io"
 	"regexp"
 	"time"
-
 	"github.com/go-playground/validator/v10"
 )
 

@@ -1,3 +1,3 @@
-module go-microservices/client
+module client
 
 go 1.21.3
