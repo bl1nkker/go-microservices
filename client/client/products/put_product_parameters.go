@@ -15,8 +15,6 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	"client/models"
 )
 
 // NewPutProductParams creates a new PutProductParams object,
@@ -69,7 +67,7 @@ type PutProductParams struct {
 	     Product data structure to Update or Create.
 	Note: the id field is ignored by update and create operations
 	*/
-	Body *models.Product
+	Body interface{}
 
 	/* ID.
 
@@ -133,13 +131,13 @@ func (o *PutProductParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the put product params
-func (o *PutProductParams) WithBody(body *models.Product) *PutProductParams {
+func (o *PutProductParams) WithBody(body interface{}) *PutProductParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the put product params
-func (o *PutProductParams) SetBody(body *models.Product) {
+func (o *PutProductParams) SetBody(body interface{}) {
 	o.Body = body
 }
 

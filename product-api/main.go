@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/go-openapi/runtime/middleware"
+	gohandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -38,9 +39,12 @@ func main(){
 	getRouter.Handle("/docs", swaggerHandler)
 	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
 
+	// cors
+	corsHandler := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"http://localhost:3000"}))
+
 	server := &http.Server{
 		Addr: ":9091",
-		Handler: sm,
+		Handler: corsHandler(sm),
 		IdleTimeout: 120 * time.Second,
 		ReadTimeout: 1 * time.Second,
 		WriteTimeout: 1 * time.Second,

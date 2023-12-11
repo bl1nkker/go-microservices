@@ -14,8 +14,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
-	"client/models"
 )
 
 // NewPostProductParams creates a new PostProductParams object,
@@ -68,7 +66,7 @@ type PostProductParams struct {
 	     Product data structure to Update or Create.
 	Note: the id field is ignored by update and create operations
 	*/
-	Body *models.Product
+	Body interface{}
 
 	timeout    time.Duration
 	Context    context.Context
@@ -124,13 +122,13 @@ func (o *PostProductParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the post product params
-func (o *PostProductParams) WithBody(body *models.Product) *PostProductParams {
+func (o *PostProductParams) WithBody(body interface{}) *PostProductParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the post product params
-func (o *PostProductParams) SetBody(body *models.Product) {
+func (o *PostProductParams) SetBody(body interface{}) {
 	o.Body = body
 }
 

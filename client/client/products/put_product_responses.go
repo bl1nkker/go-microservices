@@ -7,12 +7,9 @@ package products
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-
-	"client/models"
 )
 
 // PutProductReader is a Reader for the PutProduct structure.
@@ -45,7 +42,6 @@ PutProductCreated describes a response with status code 201, with default header
 Product returns in the response
 */
 type PutProductCreated struct {
-	Payload *models.Product
 }
 
 // IsSuccess returns true when this put product created response has a 2xx status code
@@ -79,25 +75,14 @@ func (o *PutProductCreated) Code() int {
 }
 
 func (o *PutProductCreated) Error() string {
-	return fmt.Sprintf("[PUT /products/{id}][%d] putProductCreated  %+v", 201, o.Payload)
+	return fmt.Sprintf("[PUT /products/{id}][%d] putProductCreated ", 201)
 }
 
 func (o *PutProductCreated) String() string {
-	return fmt.Sprintf("[PUT /products/{id}][%d] putProductCreated  %+v", 201, o.Payload)
-}
-
-func (o *PutProductCreated) GetPayload() *models.Product {
-	return o.Payload
+	return fmt.Sprintf("[PUT /products/{id}][%d] putProductCreated ", 201)
 }
 
 func (o *PutProductCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.Product)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }

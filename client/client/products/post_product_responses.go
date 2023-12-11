@@ -7,12 +7,9 @@ package products
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-
-	"client/models"
 )
 
 // PostProductReader is a Reader for the PostProduct structure.
@@ -57,7 +54,6 @@ PostProductOK describes a response with status code 200, with default header val
 Product returns in the response
 */
 type PostProductOK struct {
-	Payload *models.Product
 }
 
 // IsSuccess returns true when this post product o k response has a 2xx status code
@@ -91,25 +87,14 @@ func (o *PostProductOK) Code() int {
 }
 
 func (o *PostProductOK) Error() string {
-	return fmt.Sprintf("[POST /products][%d] postProductOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /products][%d] postProductOK ", 200)
 }
 
 func (o *PostProductOK) String() string {
-	return fmt.Sprintf("[POST /products][%d] postProductOK  %+v", 200, o.Payload)
-}
-
-func (o *PostProductOK) GetPayload() *models.Product {
-	return o.Payload
+	return fmt.Sprintf("[POST /products][%d] postProductOK ", 200)
 }
 
 func (o *PostProductOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.Product)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }
@@ -125,7 +110,6 @@ PostProductUnprocessableEntity describes a response with status code 422, with d
 Validation errors defined as an array of strings
 */
 type PostProductUnprocessableEntity struct {
-	Payload *models.ValidationError
 }
 
 // IsSuccess returns true when this post product unprocessable entity response has a 2xx status code
@@ -159,25 +143,14 @@ func (o *PostProductUnprocessableEntity) Code() int {
 }
 
 func (o *PostProductUnprocessableEntity) Error() string {
-	return fmt.Sprintf("[POST /products][%d] postProductUnprocessableEntity  %+v", 422, o.Payload)
+	return fmt.Sprintf("[POST /products][%d] postProductUnprocessableEntity ", 422)
 }
 
 func (o *PostProductUnprocessableEntity) String() string {
-	return fmt.Sprintf("[POST /products][%d] postProductUnprocessableEntity  %+v", 422, o.Payload)
-}
-
-func (o *PostProductUnprocessableEntity) GetPayload() *models.ValidationError {
-	return o.Payload
+	return fmt.Sprintf("[POST /products][%d] postProductUnprocessableEntity ", 422)
 }
 
 func (o *PostProductUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.ValidationError)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }
@@ -193,7 +166,6 @@ PostProductNotImplemented describes a response with status code 501, with defaul
 Generic error message returned as a string
 */
 type PostProductNotImplemented struct {
-	Payload *models.GenericError
 }
 
 // IsSuccess returns true when this post product not implemented response has a 2xx status code
@@ -227,25 +199,14 @@ func (o *PostProductNotImplemented) Code() int {
 }
 
 func (o *PostProductNotImplemented) Error() string {
-	return fmt.Sprintf("[POST /products][%d] postProductNotImplemented  %+v", 501, o.Payload)
+	return fmt.Sprintf("[POST /products][%d] postProductNotImplemented ", 501)
 }
 
 func (o *PostProductNotImplemented) String() string {
-	return fmt.Sprintf("[POST /products][%d] postProductNotImplemented  %+v", 501, o.Payload)
-}
-
-func (o *PostProductNotImplemented) GetPayload() *models.GenericError {
-	return o.Payload
+	return fmt.Sprintf("[POST /products][%d] postProductNotImplemented ", 501)
 }
 
 func (o *PostProductNotImplemented) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.GenericError)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }
